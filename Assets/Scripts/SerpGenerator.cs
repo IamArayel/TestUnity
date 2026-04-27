@@ -53,7 +53,8 @@ public class SerpGenerator : MonoBehaviour
             CharacterController cc = personnage.GetComponent<CharacterController>();
             if (cc != null) cc.enabled = false;
             
-            personnage.transform.position = new Vector3(0, 0.5f, 0); // Positionné en X=0 Y=0 Z=0
+            personnage.transform.position = new Vector3(0, 0.5f, 0); // Positionné en X=0 Y=0.5 Z=0
+            personnage.transform.rotation = Quaternion.identity;
             
             if (cc != null) cc.enabled = true;
         }
