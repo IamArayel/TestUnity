@@ -16,16 +16,20 @@ public class Soccer : MonoBehaviour
     private int score = 0;
     private Rigidbody ballonRb;
 
+    // Récupère le Rigidbody du ballon une seule fois au démarrage pour éviter
+    // d'appeler GetComponent à chaque collision
     private void Start()
     {
         if (ballon != null)
             ballonRb = ballon.GetComponent<Rigidbody>();
     }
 
+    // Appelé quand un objet entre dans le trigger du Goal.
+    // Filtre pour ne réagir qu'au ballon (tag "Ballon"), incrémente le score,
+    // remet le ballon en position initiale et termine le jeu si le score max est atteint.
     private void OnTriggerEnter(Collider other)
     {
-    Debug.Log(other.gameObject.name);
-        // Remonte au GameObject racine via le Rigidbody pour gérer les colliders enfants
+        if (!other.CompareTag("Ballon")) return;
 
         score++;
         Debug.Log("But ! Score : " + score);
@@ -42,6 +46,8 @@ public class Soccer : MonoBehaviour
         }
     }
 
+    // Attend la fin du step physique en cours avant de téléporter le ballon,
+    // sinon Unity écrase le changement de position pendant la simulation.
     private IEnumerator ResetBallon()
     {
         yield return new WaitForFixedUpdate();
@@ -50,6 +56,7 @@ public class Soccer : MonoBehaviour
         ballonRb.position = ballonPositionInitiale;
     }
 
+    // Affiche le score en overlay à l'écran à chaque frame d'interface.
     private void OnGUI()
     {
         GUIStyle style = new(GUI.skin.label)
